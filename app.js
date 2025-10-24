@@ -21,11 +21,14 @@ async function api(path, body = null, options = {}) {
   
   try {
     const res = await fetch(path, config);
+    const data = await res.json();
+    console.log('[DEBUG] Response status:', res.status);
+    console.log('[DEBUG] Response data:', data);
     if (res.status === 429) {
       showToast('Demasiadas peticiones. Espera un momento.', 'warning');
       return { error: 'rate_limit_exceeded' };
     }
-    return await res.json();
+    return data;
   } catch (error) {
     showToast('Error de conexión', 'danger');
     return { error: 'network_error' };
