@@ -396,7 +396,7 @@ function showBackupCodeVerification(username) {
     btn.disabled = true;
     btn.textContent = 'Verificando...';
     
-    const res = await api('/api/verify_backup_code', { username, code }, { skipAuth: true });
+    const res = await api('/api/verify_backup_code', { username, backup_code: code }, { skipAuth: true });
     const info = document.getElementById('b_info');
     info.innerHTML = '';
     
