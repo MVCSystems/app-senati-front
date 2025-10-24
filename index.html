@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MFA 3-Capas — Sistema de Autenticación Multifactor</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+      :root {
+        --primary: #1864ff;
+        --primary-dark: #083595;
+        --dark-bg: #01113e;
+        --light-bg: #f4f6ff;
+        --primary-gradient: linear-gradient(135deg, #1864ff 0%, #083595 100%);
+        --secondary-gradient: linear-gradient(135deg, #1864ff 0%, #083595 100%);
+        --card-shadow: 0 10px 40px rgba(8, 53, 149, 0.15);
+      }
+      
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        overflow-x: hidden;
+        letter-spacing: -0.01em;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+      }
+      
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #1864ff 0%, #083595 100%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/></svg>');
+        opacity: 0.3;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        color: white;
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 4px 12px rgba(1, 17, 62, 0.3);
+        letter-spacing: -0.02em;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        font-weight: 400;
+        opacity: 0.95;
+        margin-bottom: 2rem;
+        line-height: 1.7;
+        letter-spacing: -0.01em;
+      }
+
+      .hero-illustration {
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero-illustration img {
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+
+      .btn-hero {
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      }
+
+      .btn-hero-primary {
+        background: white;
+        color: #083595;
+        border: none;
+        font-weight: 600;
+      }
+
+      .btn-hero-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(8, 53, 149, 0.3);
+        background: #f4f6ff;
+        color: #083595;
+      }
+
+      .btn-hero-outline {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+      }
+
+      .btn-hero-outline:hover {
+        background: white;
+        color: #083595;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(8, 53, 149, 0.3);
+      }
+
+      /* Features Section */
+      .features-section {
+        padding: 6rem 0;
+        background: #f4f6ff;
+      }
+
+      .feature-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        height: 100%;
+        border: none;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      }
+
+      .feature-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 15px;
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        color: white;
+        font-size: 2rem;
+      }
+
+      .feature-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #01113e;
+        letter-spacing: -0.01em;
+      }
+
+      .feature-description {
+        color: #6c757d;
+        line-height: 1.7;
+        letter-spacing: -0.005em;
+      }
+
+      /* How it Works Section */
+      .how-it-works {
+        padding: 6rem 0;
+        background: white;
+      }
+
+      .step-card {
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .step-number {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--primary-gradient);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .step-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #01113e;
+        letter-spacing: -0.01em;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        padding: 5rem 0;
+        background: linear-gradient(135deg, #1864ff 0%, #083595 100%);
+        color: white;
+        text-align: center;
+      }
+
+      .cta-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Footer */
+      .footer {
+        background: var(--dark-bg);
+        color: rgba(255,255,255,0.7);
+        padding: 3rem 0 2rem;
+      }
+
+      .footer a {
+        color: rgba(255,255,255,0.7);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .footer a:hover {
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 2.5rem;
+        }
+        .hero-subtitle {
+          font-size: 1.1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="bi bi-shield-check"></i> MFA Demo
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#features">Características</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#how-it-works">Cómo Funciona</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary ms-3" href="/system.html">
+                <i class="bi bi-box-arrow-in-right"></i> Acceder al Sistema
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 hero-content">
+            <h1 class="hero-title">Sistema de Autenticación Multifactor de 3 Capas</h1>
+            <p class="hero-subtitle">
+              Prototipo avanzado de seguridad que implementa tres niveles de autenticación: 
+              contraseña cifrada con PBKDF2, TOTP compatible con Google Authenticator, 
+              y verificación por correo electrónico.
+            </p>
+            <div class="d-flex flex-wrap gap-3">
+              <a href="/system.html" class="btn btn-hero btn-hero-primary">
+                <i class="bi bi-play-circle"></i> Probar Demo
+              </a>
+              <button class="btn btn-hero btn-hero-outline" data-bs-toggle="modal" data-bs-target="#checklistModal">
+                <i class="bi bi-list-check"></i> Ver Checklist
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6 hero-illustration d-none d-lg-block">
+            <div class="text-center">
+              <i class="bi bi-shield-lock" style="font-size: 15rem; color: rgba(255,255,255,0.9);"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-5 fw-bold mb-3">Características del Sistema</h2>
+          <p class="lead text-muted">Tecnologías y estándares de seguridad implementados</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-key"></i>
+              </div>
+              <h3 class="feature-title">PBKDF2-HMAC-SHA256</h3>
+              <p class="feature-description">
+                Hash seguro de contraseñas con 100,000 iteraciones. Protección robusta 
+                contra ataques de fuerza bruta y rainbow tables.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-phone"></i>
+              </div>
+              <h3 class="feature-title">TOTP (RFC 6238)</h3>
+              <p class="feature-description">
+                Códigos de un solo uso basados en tiempo. Compatible con Google Authenticator, 
+                Authy y otras apps de autenticación estándar.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-envelope-check"></i>
+              </div>
+              <h3 class="feature-title">OTP por Email</h3>
+              <p class="feature-description">
+                Verificación adicional mediante código enviado por correo electrónico. 
+                Incluye fallback a archivo local para pruebas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section id="how-it-works" class="how-it-works">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-5 fw-bold mb-3">¿Cómo Funciona?</h2>
+          <p class="lead text-muted">Proceso de autenticación en 3 pasos</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h4 class="step-title">Contraseña Segura</h4>
+              <p class="text-muted">
+                Ingresa tu usuario y contraseña. El sistema verifica las credenciales 
+                contra el hash almacenado usando PBKDF2.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h4 class="step-title">Código TOTP</h4>
+              <p class="text-muted">
+                Escanea el código QR con tu app de autenticación e ingresa el código 
+                de 6 dígitos generado cada 30 segundos.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h4 class="step-title">Verificación Email</h4>
+              <p class="text-muted">
+                Recibe un código OTP en tu correo electrónico e ingrésalo para 
+                completar la autenticación multifactor.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">¿Listo para probar el sistema?</h2>
+        <p class="lead mb-4">Experimenta la autenticación multifactor en acción</p>
+        <a href="/system.html" class="btn btn-hero btn-hero-primary">
+          <i class="bi bi-rocket-takeoff"></i> Iniciar Demo
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="mb-3">MFA Demo</h5>
+            <p class="small">
+              Sistema de autenticación multifactor desarrollado como proyecto de tesis. 
+              Código educativo - No apto para producción sin modificaciones de seguridad.
+            </p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <h5 class="mb-3">Tecnologías</h5>
+            <p class="small">
+              Python (stdlib) • Bootstrap 5 • HTML/CSS/JS<br>
+              PBKDF2 • TOTP RFC6238 • SMTP
+            </p>
+          </div>
+        </div>
+        <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+        <div class="text-center small">
+          <p class="mb-0">© 2025 MFA Demo - Proyecto Académico | Consulta el README para instrucciones</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Pre-launch Checklist Modal -->
+    <div class="modal fade" id="checklistModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="bi bi-list-check"></i> Pre-launch Checklist</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle"></i> Verifica estos puntos antes de iniciar la demo
+            </div>
+            <div class="list-group list-group-flush">
+              <label class="list-group-item">
+                <input class="form-check-input me-2" type="checkbox" id="chk-1">
+                Servidor arrancado en <code>backend/</code>
+              </label>
+              <label class="list-group-item">
+                <input class="form-check-input me-2" type="checkbox" id="chk-2">
+                Credenciales SMTP configuradas (opcional)
+              </label>
+              <label class="list-group-item">
+                <input class="form-check-input me-2" type="checkbox" id="chk-3">
+                App de autenticación instalada (Google Authenticator, Authy, etc.)
+              </label>
+              <label class="list-group-item">
+                <input class="form-check-input me-2" type="checkbox" id="chk-4">
+                Archivo <code>outbox.txt</code> listo para debug
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <a href="/system.html" class="btn btn-primary">
+              <i class="bi bi-play-circle"></i> Iniciar Demo
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

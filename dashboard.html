@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - MFA Demo</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+      :root {
+        --primary: #1864ff;
+        --primary-dark: #083595;
+        --dark-bg: #01113e;
+        --light-bg: #f4f6ff;
+        --primary-gradient: linear-gradient(135deg, #1864ff 0%, #083595 100%);
+        --card-shadow: 0 10px 40px rgba(8, 53, 149, 0.15);
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(to bottom, #f4f6ff 0%, #ffffff 100%);
+        padding-top: 70px;
+        letter-spacing: -0.01em;
+        min-height: 100vh;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(8, 53, 149, 0.08);
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        background: linear-gradient(135deg, #1864ff 0%, #083595 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.5rem;
+      }
+
+      .user-badge {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      /* Hero Dashboard */
+      .dashboard-hero {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 30px 30px;
+        box-shadow: 0 10px 40px rgba(8, 53, 149, 0.2);
+      }
+
+      .welcome-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.02em;
+      }
+
+      .welcome-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.95;
+      }
+
+      .success-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        backdrop-filter: blur(10px);
+      }
+
+      /* Stats Cards */
+      .stat-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        border: none;
+        height: 100%;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(8, 53, 149, 0.2);
+      }
+
+      .stat-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 18px;
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: white;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 20px rgba(24, 100, 255, 0.3);
+      }
+
+      .stat-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--dark-bg);
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .stat-label {
+        font-size: 0.95rem;
+        color: #6c757d;
+        font-weight: 500;
+      }
+
+      /* Info Cards */
+      .info-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        border: none;
+        margin-bottom: 2rem;
+      }
+
+      .info-card h4 {
+        color: var(--dark-bg);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        font-size: 1.4rem;
+        letter-spacing: -0.01em;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: var(--light-bg);
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+        transition: all 0.2s ease;
+      }
+
+      .info-item:hover {
+        background: #e8edff;
+        transform: translateX(5px);
+      }
+
+      .info-item i {
+        font-size: 1.5rem;
+        color: var(--primary);
+        margin-right: 1rem;
+        width: 30px;
+        text-align: center;
+      }
+
+      .info-item-content {
+        flex: 1;
+      }
+
+      .info-item-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+      }
+
+      .info-item-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--dark-bg);
+      }
+
+      /* Security Timeline */
+      .security-timeline {
+        position: relative;
+        padding-left: 2rem;
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-bottom: 2rem;
+      }
+
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -2rem;
+        top: 0.5rem;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--primary);
+        box-shadow: 0 0 0 4px rgba(24, 100, 255, 0.2);
+      }
+
+      .timeline-item::after {
+        content: '';
+        position: absolute;
+        left: -1.5rem;
+        top: 1.5rem;
+        width: 2px;
+        height: calc(100% - 1rem);
+        background: #e9ecef;
+      }
+
+      .timeline-item:last-child::after {
+        display: none;
+      }
+
+      .timeline-content {
+        background: var(--light-bg);
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+      }
+
+      .timeline-title {
+        font-weight: 600;
+        color: var(--dark-bg);
+        margin-bottom: 0.25rem;
+      }
+
+      .timeline-time {
+        font-size: 0.85rem;
+        color: #6c757d;
+      }
+
+      /* Action Buttons */
+      .btn-logout {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+      }
+
+      .btn-logout:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+        color: white;
+      }
+
+      .btn-action {
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-action:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(24, 100, 255, 0.3);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .fade-in-up-delay-1 {
+        animation: fadeInUp 0.6s ease-out 0.1s both;
+      }
+
+      .fade-in-up-delay-2 {
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+      }
+
+      .fade-in-up-delay-3 {
+        animation: fadeInUp 0.6s ease-out 0.3s both;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .welcome-title {
+          font-size: 2rem;
+        }
+
+        .stat-value {
+          font-size: 2rem;
+        }
+
+        .dashboard-hero {
+          padding: 2rem 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="bi bi-shield-check"></i> MFA Demo
+        </a>
+        <div class="ms-auto d-flex align-items-center gap-3">
+          <span class="user-badge" id="userBadge">
+            <i class="bi bi-person-circle"></i> <span id="navUsername">Usuario</span>
+          </span>
+          <button class="btn btn-sm btn-logout" onclick="logout()">
+            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard Hero -->
+    <div class="dashboard-hero">
+      <div class="container text-center">
+        <div class="mb-4">
+          <i class="bi bi-shield-check-fill" style="font-size: 4rem; opacity: 0.9;"></i>
+        </div>
+        <h1 class="welcome-title" id="welcomeTitle">¡Bienvenido!</h1>
+        <p class="welcome-subtitle">Has completado exitosamente la autenticación multifactor</p>
+        <div class="success-badge">
+          <i class="bi bi-check-circle-fill"></i>
+          <span>Autenticación de 3 Capas Completada</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mb-5">
+      <!-- Stats Row -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4 fade-in-up">
+          <div class="card stat-card">
+            <div class="stat-icon">
+              <i class="bi bi-key"></i>
+            </div>
+            <div class="stat-value">3</div>
+            <div class="stat-label">Capas de Seguridad</div>
+          </div>
+        </div>
+        <div class="col-md-4 fade-in-up-delay-1">
+          <div class="card stat-card">
+            <div class="stat-icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Nivel de Protección</div>
+          </div>
+        </div>
+        <div class="col-md-4 fade-in-up-delay-2">
+          <div class="card stat-card">
+            <div class="stat-icon">
+              <i class="bi bi-clock-history"></i>
+            </div>
+            <div class="stat-value" id="sessionTime">00:00</div>
+            <div class="stat-label">Tiempo de Sesión</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Info Row -->
+      <div class="row g-4">
+        <!-- User Information -->
+        <div class="col-lg-6 fade-in-up-delay-3">
+          <div class="info-card">
+            <h4><i class="bi bi-person-circle"></i> Información del Usuario</h4>
+            <div class="info-item">
+              <i class="bi bi-person"></i>
+              <div class="info-item-content">
+                <div class="info-item-label">Usuario</div>
+                <div class="info-item-value" id="username">-</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-envelope"></i>
+              <div class="info-item-content">
+                <div class="info-item-label">Email</div>
+                <div class="info-item-value" id="email">-</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-calendar-check"></i>
+              <div class="info-item-content">
+                <div class="info-item-label">Fecha de Registro</div>
+                <div class="info-item-value" id="registerDate">-</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-clock"></i>
+              <div class="info-item-content">
+                <div class="info-item-label">Último Acceso</div>
+                <div class="info-item-value" id="lastAccess">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Timeline -->
+        <div class="col-lg-6 fade-in-up-delay-3">
+          <div class="info-card">
+            <h4><i class="bi bi-shield-lock"></i> Verificaciones Completadas</h4>
+            <div class="security-timeline">
+              <div class="timeline-item">
+                <div class="timeline-content">
+                  <div class="timeline-title">
+                    <i class="bi bi-check-circle-fill text-success"></i> Contraseña Verificada
+                  </div>
+                  <div class="timeline-time">PBKDF2-HMAC-SHA256 con 100,000 iteraciones</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-content">
+                  <div class="timeline-title">
+                    <i class="bi bi-check-circle-fill text-success"></i> TOTP Autenticado
+                  </div>
+                  <div class="timeline-time">Código de tiempo único (RFC 6238)</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-content">
+                  <div class="timeline-title">
+                    <i class="bi bi-check-circle-fill text-success"></i> Email OTP Verificado
+                  </div>
+                  <div class="timeline-time">Código de un solo uso enviado por correo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="row mt-5">
+        <div class="col-12 fade-in-up-delay-3">
+          <div class="info-card">
+            <h4><i class="bi bi-lightning-charge"></i> Acciones Rápidas</h4>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <button class="btn btn-action w-100" onclick="showBackupCodes()">
+                  <i class="bi bi-shield-lock"></i> Ver Códigos de Respaldo
+                </button>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-action w-100" onclick="showSecuritySettings()">
+                  <i class="bi bi-gear"></i> Configuración de Seguridad
+                </button>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-action w-100" onclick="showActivityLog()">
+                  <i class="bi bi-clock-history"></i> Historial de Actividad
+                </button>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-action w-100" onclick="downloadSecurityReport()">
+                  <i class="bi bi-download"></i> Descargar Informe
+                </button>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-action w-100" onclick="window.location.href='/system.html'">
+                  <i class="bi bi-arrow-repeat"></i> Probar Nuevamente
+                </button>
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-logout w-100" onclick="logout()">
+                  <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <div class="alert alert-info text-center" style="border-radius: 16px; border: none;">
+            <i class="bi bi-info-circle-fill"></i> 
+            <strong>Nota:</strong> Esta es una demostración académica del sistema MFA. 
+            Los datos se almacenan localmente para fines educativos.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Backup Codes Modal -->
+    <div class="modal fade" id="backupCodesModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+          <div class="modal-header" style="background: var(--primary-gradient); color: white; border-radius: 20px 20px 0 0;">
+            <h5 class="modal-title"><i class="bi bi-shield-lock"></i> Códigos de Respaldo</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle"></i> Guarda estos códigos en un lugar seguro. Cada uno puede usarse solo una vez.
+            </div>
+            <div id="backupCodesList" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;">
+              <!-- Los códigos se generarán aquí -->
+            </div>
+            <button class="btn btn-primary w-100 mt-3" onclick="copyBackupCodes()">
+              <i class="bi bi-clipboard"></i> Copiar Todos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Settings Modal -->
+    <div class="modal fade" id="securityModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+          <div class="modal-header" style="background: var(--primary-gradient); color: white; border-radius: 20px 20px 0 0;">
+            <h5 class="modal-title"><i class="bi bi-gear"></i> Configuración de Seguridad</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="info-item mb-3">
+              <i class="bi bi-phone"></i>
+              <div class="info-item-content">
+                <div class="info-item-label">Aplicación de Autenticación</div>
+                <div class="info-item-value">Google Authenticator <span class="badge bg-success">Activo</span></div>
+              </div>
+              <button class="btn btn-sm btn-outline-primary">Reconfigurar</button>
+            </div>
+            <div class="info-item mb-3">
+              <i class="bi bi-envelope"></i>
+              <div class="info-item-content">
+                <div class="info-item-label">Verificación por Email</div>
+                <div class="info-item-value" id="modalEmail">email@ejemplo.com</div>
+              </div>
+              <button class="btn btn-sm btn-outline-primary">Cambiar</button>
+            </div>
+            <div class="info-item mb-3">
+              <i class="bi bi-key"></i>
+              <div class="info-item-content">
+                <div class="info-item-label">Contraseña</div>
+                <div class="info-item-value">••••••••</div>
+              </div>
+              <button class="btn btn-sm btn-outline-primary">Cambiar</button>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-clock"></i>
+              <div class="info-item-content">
+                <div class="info-item-label">Caducidad de Sesión</div>
+                <div class="info-item-value">30 minutos de inactividad</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Log Modal -->
+    <div class="modal fade" id="activityModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+          <div class="modal-header" style="background: var(--primary-gradient); color: white; border-radius: 20px 20px 0 0;">
+            <h5 class="modal-title"><i class="bi bi-clock-history"></i> Historial de Actividad</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div id="activityList">
+              <!-- Actividades se generarán aquí -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Obtener datos del usuario desde URL params o localStorage
+      const urlParams = new URLSearchParams(window.location.search);
+      const username = urlParams.get('user') || localStorage.getItem('mfa_username') || 'Usuario';
+      const email = urlParams.get('email') || localStorage.getItem('mfa_email') || 'email@ejemplo.com';
+
+      // Guardar en localStorage
+      if (urlParams.get('user')) {
+        localStorage.setItem('mfa_username', username);
+        localStorage.setItem('mfa_email', email);
+        localStorage.setItem('mfa_login_time', new Date().toISOString());
+      }
+
+      // Actualizar elementos del DOM
+      document.getElementById('welcomeTitle').textContent = `¡Bienvenido, ${username}!`;
+      document.getElementById('navUsername').textContent = username;
+      document.getElementById('username').textContent = username;
+      document.getElementById('email').textContent = email;
+      
+      // Fecha de registro (simulada)
+      const registerDate = new Date();
+      registerDate.setDate(registerDate.getDate() - Math.floor(Math.random() * 30));
+      document.getElementById('registerDate').textContent = registerDate.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      // Último acceso (ahora)
+      const now = new Date();
+      document.getElementById('lastAccess').textContent = now.toLocaleString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      // Temporizador de sesión
+      let sessionStart = new Date(localStorage.getItem('mfa_login_time') || new Date());
+      function updateSessionTime() {
+        const now = new Date();
+        const diff = Math.floor((now - sessionStart) / 1000);
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+        document.getElementById('sessionTime').textContent = 
+          `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }
+      setInterval(updateSessionTime, 1000);
+      updateSessionTime();
+
+      // Función de cerrar sesión
+      function logout() {
+        if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+          // Limpiar COMPLETAMENTE localStorage y sessionStorage
+          localStorage.clear();
+          sessionStorage.clear();
+          
+          // Mostrar mensaje de despedida
+          document.body.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #1864ff 0%, #083595 100%); color: white; text-align: center; padding: 2rem;">
+              <div>
+                <i class="bi bi-check-circle" style="font-size: 5rem; margin-bottom: 1rem;"></i>
+                <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">Sesión Cerrada</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">Gracias por usar el sistema MFA</p>
+                <div class="spinner-border" role="status" style="width: 3rem; height: 3rem;">
+                  <span class="visually-hidden">Redirigiendo...</span>
+                </div>
+                <p style="margin-top: 1rem; opacity: 0.8;">Redirigiendo a la página principal...</p>
+              </div>
+            </div>
+          `;
+          
+          // Redirigir con parámetro logout=true para forzar limpieza
+          setTimeout(() => {
+            window.location.href = '/system.html?logout=true';
+          }, 2000);
+        }
+      }
+
+      // Prevenir retroceso sin confirmación
+      window.addEventListener('beforeunload', function(e) {
+        if (localStorage.getItem('mfa_username')) {
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+
+      // Funciones de Acciones Rápidas
+      function showBackupCodes() {
+        // Obtener códigos guardados de localStorage o generar simulados si no existen
+        const savedCodesKey = `backup_codes_${username}`;
+        let codes = [];
+        
+        try {
+          const savedCodes = localStorage.getItem(savedCodesKey);
+          if (savedCodes) {
+            codes = JSON.parse(savedCodes);
+          }
+        } catch (error) {
+          console.error('Error al cargar códigos de respaldo:', error);
+        }
+        
+        // Si no hay códigos guardados, generar simulados
+        if (!codes || codes.length === 0) {
+          codes = Array.from({length: 10}, () => 
+            Array.from({length: 4}, () => Math.floor(1000 + Math.random() * 9000)).join('-')
+          );
+        }
+        
+        const list = document.getElementById('backupCodesList');
+        list.innerHTML = codes.map((code, index) => 
+          `<div class="d-flex justify-content-between align-items-center mb-2">
+            <code class="p-2 bg-light rounded flex-grow-1">${code}</code>
+            <button class="btn btn-sm btn-outline-danger ms-2" onclick="deleteBackupCode(${index})" title="Eliminar">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>`
+        ).join('');
+        
+        // Guardar códigos para copiar
+        window.generatedBackupCodes = codes;
+        
+        const modal = new bootstrap.Modal(document.getElementById('backupCodesModal'));
+        modal.show();
+      }
+
+      function deleteBackupCode(index) {
+        if (!confirm('¿Estás seguro de eliminar este código de respaldo?')) {
+          return;
+        }
+        
+        const savedCodesKey = `backup_codes_${username}`;
+        try {
+          const savedCodes = localStorage.getItem(savedCodesKey);
+          if (savedCodes) {
+            const codes = JSON.parse(savedCodes);
+            codes.splice(index, 1); // Eliminar el código
+            localStorage.setItem(savedCodesKey, JSON.stringify(codes));
+            showBackupCodes(); // Recargar la vista
+          }
+        } catch (error) {
+          console.error('Error al eliminar código:', error);
+          alert('❌ Error al eliminar el código de respaldo');
+        }
+      }
+
+      function copyBackupCodes() {
+        const codes = window.generatedBackupCodes.join('\n');
+        navigator.clipboard.writeText(codes).then(() => {
+          alert('✅ Códigos copiados al portapapeles');
+        });
+      }
+
+      function showSecuritySettings() {
+        document.getElementById('modalEmail').textContent = email;
+        const modal = new bootstrap.Modal(document.getElementById('securityModal'));
+        modal.show();
+      }
+
+      function showActivityLog() {
+        const activities = [
+          { action: 'Inicio de sesión exitoso', time: new Date(), ip: '127.0.0.1', device: 'Chrome - Windows' },
+          { action: 'Verificación TOTP completada', time: new Date(Date.now() - 2 * 60000), ip: '127.0.0.1', device: 'Chrome - Windows' },
+          { action: 'Verificación Email OTP completada', time: new Date(Date.now() - 3 * 60000), ip: '127.0.0.1', device: 'Chrome - Windows' },
+          { action: 'Contraseña verificada', time: new Date(Date.now() - 4 * 60000), ip: '127.0.0.1', device: 'Chrome - Windows' },
+        ];
+
+        const list = document.getElementById('activityList');
+        list.innerHTML = activities.map(act => `
+          <div class="info-item mb-3">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            <div class="info-item-content">
+              <div class="info-item-value">${act.action}</div>
+              <div class="info-item-label">
+                ${act.time.toLocaleString('es-ES')} • ${act.ip} • ${act.device}
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        const modal = new bootstrap.Modal(document.getElementById('activityModal'));
+        modal.show();
+      }
+
+      function downloadSecurityReport() {
+        const report = `
+═══════════════════════════════════════════════════════
+    INFORME DE SEGURIDAD - SISTEMA MFA
+═══════════════════════════════════════════════════════
+
+INFORMACIÓN DEL USUARIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Usuario:           ${username}
+Email:             ${email}
+Fecha de Registro: ${document.getElementById('registerDate').textContent}
+Último Acceso:     ${document.getElementById('lastAccess').textContent}
+
+ESTADO DE SEGURIDAD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Autenticación de 3 Capas: ACTIVA
+✓ Contraseña:               SEGURA (PBKDF2-HMAC-SHA256)
+✓ TOTP (Google Auth):       CONFIGURADO
+✓ Verificación por Email:   ACTIVA
+✓ Códigos de Respaldo:      DISPONIBLES
+
+MÉTODOS DE AUTENTICACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Contraseña Principal
+   - Algoritmo: PBKDF2-HMAC-SHA256
+   - Iteraciones: 100,000
+   - Estado: ✓ Activo
+
+2. TOTP (Time-based OTP)
+   - Estándar: RFC 6238
+   - Aplicación: Google Authenticator
+   - Estado: ✓ Activo
+
+3. Email OTP
+   - Destinatario: ${email}
+   - Validez: 10 minutos
+   - Estado: ✓ Activo
+
+ACTIVIDAD RECIENTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Inicio de sesión exitoso
+• Verificación TOTP completada
+• Verificación Email OTP completada
+• Todas las capas de seguridad verificadas
+
+RECOMENDACIONES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Mantén tus códigos de respaldo en un lugar seguro
+✓ No compartas tu contraseña ni códigos TOTP
+✓ Revisa regularmente tu historial de actividad
+✓ Actualiza tu email si es necesario
+
+═══════════════════════════════════════════════════════
+Generado: ${new Date().toLocaleString('es-ES')}
+Sistema: MFA Demo - Proyecto Académico
+═══════════════════════════════════════════════════════
+        `.trim();
+
+        // Crear y descargar archivo
+        const blob = new Blob([report], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `informe-seguridad-${username}-${Date.now()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert('✅ Informe de seguridad descargado exitosamente');
+      }
+    </script>
+  </body>
+</html>
