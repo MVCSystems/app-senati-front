@@ -686,8 +686,30 @@
       updateSessionTime();
 
       // Función de cerrar sesión
-      function logout() {
+      async function logout() {
         if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+          try {
+            // Obtener token antes de limpiar
+            const token = localStorage.getItem('mfa_access_token');
+            
+            // Invalidar token en el servidor
+            if (token) {
+              await fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token })
+              }).catch(err => console.log('Error al invalidar token:', err));
+            }
+          } catch (error) {
+            console.log('Error en logout:', error);
+          }
+          
+          // Señal para otras pestañas: marcar logout
+          localStorage.setItem('mfa_logout_signal', Date.now().toString());
+          
           // Limpiar COMPLETAMENTE localStorage y sessionStorage
           localStorage.clear();
           sessionStorage.clear();
@@ -713,6 +735,31 @@
           }, 2000);
         }
       }
+
+      // Detectar logout en otras pestañas
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'mfa_logout_signal') {
+          console.log('Logout detectado en otra pestaña');
+          // Limpiar todo sin confirmación
+          localStorage.clear();
+          sessionStorage.clear();
+          
+          // Redirigir inmediatamente
+          document.body.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #1864ff 0%, #083595 100%); color: white; text-align: center; padding: 2rem;">
+              <div>
+                <i class="bi bi-info-circle" style="font-size: 5rem; margin-bottom: 1rem;"></i>
+                <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">Sesión Cerrada</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9;">Sesión cerrada en otra pestaña</p>
+              </div>
+            </div>
+          `;
+          
+          setTimeout(() => {
+            window.location.href = '/system.html?logout=true';
+          }, 1500);
+        }
+      });
 
       // Prevenir retroceso sin confirmación
       window.addEventListener('beforeunload', function(e) {
