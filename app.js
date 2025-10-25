@@ -288,13 +288,14 @@ function showLogin() {
     btn.disabled = false;
     btn.textContent = 'Login';
     
-    // Verificar si es admin con acceso directo
-    if (res.ok && res.admin_access) {
+    // Verificar si recibió tokens directamente (admin bypass o MFA completado)
+    if (res.ok && res.access_token && res.user) {
       saveSession(res.user, res.access_token, res.refresh_token);
       setStepCompleted(1);
       setStepCompleted(2);
       setStepCompleted(3);
-      showToast('¡Bienvenido Admin!', 'success');
+      const welcomeMsg = res.user.role === 'admin' ? '¡Bienvenido Admin!' : '¡Acceso concedido!';
+      showToast(welcomeMsg, 'success');
       setTimeout(() => {
         window.location.href = `/dashboard.html?user=${res.user.username}&email=${res.user.email}`;
       }, 500);
