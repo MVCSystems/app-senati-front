@@ -499,6 +499,41 @@
         </div>
       </div>
 
+      <!-- Admin Section: User Management (only visible for admin role) -->
+      <div class="row mt-5" id="adminUsersSection" style="display: none;">
+        <div class="col-12">
+          <div class="info-card">
+            <h4><i class="bi bi-people-fill"></i> Gestión de Usuarios</h4>
+            <p class="text-muted mb-4">Lista de todos los usuarios registrados en el sistema</p>
+            
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Intentos</th>
+                    <th>Último Login</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                  <tr>
+                    <td colspan="7" class="text-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Footer Info -->
       <div class="row mt-5">
         <div class="col-12">
@@ -580,38 +615,6 @@
       </div>
     </div>
 
-    <!-- Admin Section: User Management (only visible for admin role) -->
-    <div class="container mb-5" id="adminUsersSection" style="display: none;">
-      <div class="info-card">
-        <h4><i class="bi bi-people-fill"></i> Gestión de Usuarios</h4>
-        <p class="text-muted mb-4">Lista de todos los usuarios registrados en el sistema</p>
-        
-        <div class="table-responsive">
-          <table class="table table-hover align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>ID</th>
-                <th>Usuario</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th>Intentos</th>
-                <th>Último Login</th>
-              </tr>
-            </thead>
-            <tbody id="usersTableBody">
-              <tr>
-                <td colspan="7" class="text-center">
-                  <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Cargando...</span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
 
     <!-- Activity Log Modal -->
     <div class="modal fade" id="activityModal" tabindex="-1">
