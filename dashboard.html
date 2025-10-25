@@ -580,6 +580,39 @@
       </div>
     </div>
 
+    <!-- Admin Section: User Management (only visible for admin role) -->
+    <div class="container mb-5" id="adminUsersSection" style="display: none;">
+      <div class="info-card">
+        <h4><i class="bi bi-people-fill"></i> Gestión de Usuarios</h4>
+        <p class="text-muted mb-4">Lista de todos los usuarios registrados en el sistema</p>
+        
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Intentos</th>
+                <th>Último Login</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <tr>
+                <td colspan="7" class="text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- Activity Log Modal -->
     <div class="modal fade" id="activityModal" tabindex="-1">
       <div class="modal-dialog modal-lg">
@@ -855,6 +888,70 @@ Sistema: MFA Demo - Proyecto Académico
         
         alert('✅ Informe de seguridad descargado exitosamente');
       }
+
+      // Cargar usuarios si es admin
+      async function loadUsers() {
+        const token = localStorage.getItem('mfa_access_token');
+        if (!token) return;
+
+        try {
+          const res = await fetch('/api/admin/users', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            if (data.users) {
+              // Mostrar sección de admin
+              document.getElementById('adminUsersSection').style.display = 'block';
+              
+              // Llenar tabla
+              const tbody = document.getElementById('usersTableBody');
+              tbody.innerHTML = data.users.map(u => `
+                <tr>
+                  <td><strong>#${u.id}</strong></td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-person-circle me-2 text-primary" style="font-size: 1.5rem;"></i>
+                      <strong>${u.username}</strong>
+                    </div>
+                  </td>
+                  <td>${u.email}</td>
+                  <td>
+                    <span class="badge ${u.role === 'admin' ? 'bg-danger' : 'bg-primary'}">
+                      ${u.role === 'admin' ? '👑 Admin' : 'User'}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge ${u.is_locked ? 'bg-danger' : 'bg-success'}">
+                      <i class="bi ${u.is_locked ? 'bi-lock-fill' : 'bi-unlock-fill'}"></i>
+                      ${u.is_locked ? 'Bloqueado' : 'Activo'}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge ${u.failed_attempts > 2 ? 'bg-warning' : 'bg-secondary'}">
+                      ${u.failed_attempts || 0}
+                    </span>
+                  </td>
+                  <td>
+                    <small class="text-muted">
+                      ${u.last_login ? new Date(u.last_login).toLocaleString('es-ES') : 'Nunca'}
+                    </small>
+                  </td>
+                </tr>
+              `).join('');
+            }
+          }
+        } catch (error) {
+          console.error('Error cargando usuarios:', error);
+        }
+      }
+
+      // Cargar usuarios al iniciar
+      loadUsers();
     </script>
   </body>
 </html>
