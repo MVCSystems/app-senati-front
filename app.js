@@ -288,8 +288,16 @@ function showLogin() {
     btn.disabled = false;
     btn.textContent = 'Login';
     
+    console.log('[LOGIN] Checking response:', {
+      hasOk: !!res.ok,
+      hasAccessToken: !!res.access_token,
+      hasUser: !!res.user,
+      hasRequireTotp: !!res.require_totp
+    });
+    
     // Verificar si recibió tokens directamente (admin bypass o MFA completado)
     if (res.ok && res.access_token && res.user) {
+      console.log('[LOGIN] Admin bypass detected - redirecting to dashboard');
       saveSession(res.user, res.access_token, res.refresh_token);
       setStepCompleted(1);
       setStepCompleted(2);
@@ -303,10 +311,12 @@ function showLogin() {
     }
     
     if (res.ok && res.require_totp) {
+      console.log('[LOGIN] Require TOTP - showing TOTP form');
       setStepCompleted(1);
       showTotp(username);
       showToast('Contraseña correcta', 'success');
     } else {
+      console.log('[LOGIN] Login failed - showing error');
       const alert = document.createElement('div');
       alert.className = 'alert alert-danger';
       alert.textContent = 'Error: ' + (res.error || 'Credenciales inválidas');
