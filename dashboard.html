@@ -515,7 +515,6 @@
                     <th>Email</th>
                     <th>Rol</th>
                     <th>Estado</th>
-                    <th>Intentos</th>
                     <th>Último Login</th>
                   </tr>
                 </thead>
@@ -941,11 +940,6 @@ Sistema: MFA Demo - Proyecto Académico
                     <span class="badge ${u.is_locked ? 'bg-danger' : 'bg-success'}">
                       <i class="bi ${u.is_locked ? 'bi-lock-fill' : 'bi-unlock-fill'}"></i>
                       ${u.is_locked ? 'Bloqueado' : 'Activo'}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="badge ${u.failed_attempts > 2 ? 'bg-warning' : 'bg-secondary'}">
-                      ${u.failed_attempts || 0}
                     </span>
                   </td>
                   <td>
